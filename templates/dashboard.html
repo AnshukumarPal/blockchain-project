@@ -1,0 +1,308 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="dashboard-wrapper">
+    <div class="dashboard-header">
+        <div class="welcome-section">
+            <h1><i class="fas fa-user-circle"></i> Welcome, {{ user.username }}!</h1>
+            <p class="subtitle">Track your study progress on the blockchain</p>
+            {% if stats.blockchain_valid %}
+                <div class="blockchain-status valid">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Blockchain Verified</span>
+                </div>
+            {% else %}
+                <div class="blockchain-status invalid">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>Blockchain Integrity Issue</span>
+                </div>
+            {% endif %}
+        </div>
+        <a href="{{ url_for('logout') }}" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+        </a>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs">
+        <a href="{{ url_for('dashboard') }}" class="nav-tab active">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+        </a>
+        <a href="{{ url_for('blockchain') }}" class="nav-tab">
+            <i class="fas fa-cube"></i>
+            <span>Blockchain Explorer</span>
+        </a>
+    </div>
+
+    <!-- Statistics Cards - REORDERED: Row 1: Study Time, Completed, Pending | Row 2: Total Blocks, Top Subject, Streak -->
+    <div class="stats-container">
+        <!-- Row 1 -->
+        <div class="stat-card">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #7B61FF 0%, #667eea 100%); color: white;">
+                <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-content">
+                <h3>{{ stats.total_study_hours }}h</h3>
+                <p>Study Time</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #00FFB9 0%, #00D4FF 100%); color: white;">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-content">
+                <h3>{{ stats.completed_sessions }}</h3>
+                <p>Completed</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #FF9500 0%, #FF3B30 100%); color: white;">
+                <i class="fas fa-hourglass-half"></i>
+            </div>
+            <div class="stat-content">
+                <h3>{{ stats.pending_sessions }}</h3>
+                <p>Pending</p>
+            </div>
+        </div>
+        <!-- Row 2 -->
+        <div class="stat-card">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #00D4FF 0%, #7B61FF 100%); color: white;">
+                <i class="fas fa-cubes"></i>
+            </div>
+            <div class="stat-content">
+                <h3>{{ stats.total_blocks }}</h3>
+                <p>Total Blocks</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #FFC837 0%, #FF8008 100%); color: white;">
+                <i class="fas fa-star"></i>
+            </div>
+            <div class="stat-content">
+                <h3 style="font-size: 1.25rem;">{{ stats.favorite_subject }}</h3>
+                <p>Top Subject</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%); color: white;">
+                <i class="fas fa-fire"></i>
+            </div>
+            <div class="stat-content">
+                <h3>{{ stats.streak }}</h3>
+                <p>Day Streak</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-dashboard-box">
+        <div class="section-layout">
+            <!-- Add Study Session -->
+            <div class="section-box">
+                <div class="section-header">
+                    <i class="fas fa-plus-circle"></i>
+                    <h2>Mine New Block</h2>
+                </div>
+                <form method="POST" class="session-form">
+                    <div class="form-group">
+                        <label>
+                            <i class="fas fa-calendar"></i> Date
+                        </label>
+                        <input type="date" name="date" value="{{ today_date }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <i class="fas fa-book"></i> Subject
+                        </label>
+                        <input type="text" name="subject" placeholder="e.g., Mathematics" required>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <i class="fas fa-clock"></i> Duration
+                        </label>
+                        <div class="duration-input">
+                            <input type="number" name="duration" placeholder="Duration" min="1" required>
+                            <select name="duration_unit">
+                                <option value="minutes">Minutes</option>
+                                <option value="hours">Hours</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <i class="fas fa-check-circle"></i> Status
+                        </label>
+                        <select name="status">
+                            <option value="pending">Pending</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-hammer"></i>
+                        <span>Mine Block (PoW)</span>
+                    </button>
+                    <div style="font-size: 0.85em; color: var(--text-secondary); text-align: center; margin-top: 10px;">
+                        <i class="fas fa-info-circle"></i> Block will be mined with Proof of Work
+                    </div>
+                </form>
+            </div>
+
+            <!-- Blockchain Info -->
+            <div class="section-box">
+                <div class="section-header">
+                    <i class="fas fa-info-circle"></i>
+                    <h2>Blockchain Info</h2>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <div class="data-item">
+                        <div class="data-label">
+                            <i class="fas fa-link"></i> Chain Status
+                        </div>
+                        <div class="data-value">
+                            {% if stats.blockchain_valid %}
+                                <span style="color: var(--accent-success);">
+                                    <i class="fas fa-check-circle"></i> Valid
+                                </span>
+                            {% else %}
+                                <span style="color: var(--accent-danger);">
+                                    <i class="fas fa-times-circle"></i> Invalid
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">
+                            <i class="fas fa-cubes"></i> Total Blocks
+                        </div>
+                        <div class="data-value">{{ stats.total_blocks }}</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">
+                            <i class="fas fa-layer-group"></i> Consensus
+                        </div>
+                        <div class="data-value">Proof of Work (PoW)</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">
+                            <i class="fas fa-tachometer-alt"></i> Difficulty
+                        </div>
+                        <div class="data-value">3 leading zeros</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">
+                            <i class="fas fa-fingerprint"></i> Hash Algorithm
+                        </div>
+                        <div class="data-value">SHA-256</div>
+                    </div>
+                    {% if sessions %}
+                    <div class="data-item">
+                        <div class="data-label">
+                            <i class="fas fa-cube"></i> Latest Block Hash
+                        </div>
+                        <div class="hash-display">{{ sessions[0].hash }}</div>
+                    </div>
+                    {% endif %}
+                    <a href="{{ url_for('blockchain') }}" class="btn-primary" style="margin-top: 15px;">
+                        <i class="fas fa-cube"></i>
+                        <span>View Full Blockchain</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Study Sessions -->
+        <div class="section-box" style="margin-top: 35px;">
+            <div class="section-header">
+                <i class="fas fa-list"></i>
+                <h2>Recent Blocks (Study Sessions)</h2>
+            </div>
+            <div class="sessions-list">
+                {% if sessions %}
+                    {% for session in sessions[:12] %}
+                    <div class="session-card {% if session.status == 'pending' %}pending{% else %}completed{% endif %}">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <div style="background: var(--blockchain-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 700; font-size: 1.2em;">
+                                <i class="fas fa-cube"></i> Block #{{ session.block_number }}
+                            </div>
+                            <div style="font-size: 0.8em; color: var(--text-secondary);">
+                                Nonce: {{ session.nonce }}
+                            </div>
+                        </div>
+                        <div class="session-info">
+                            <div>
+                                <i class="fas fa-calendar-day"></i>
+                                <span>{{ session.date.strftime('%b %d, %Y') }}</span>
+                            </div>
+                            <div>
+                                <i class="fas fa-book"></i>
+                                <span>{{ session.subject }}</span>
+                            </div>
+                            <div>
+                                <i class="fas fa-clock"></i>
+                                <span>{{ session.duration }} min</span>
+                            </div>
+                            <div>
+                                {% if session.status == 'pending' %}
+                                    <i class="fas fa-hourglass-half"></i>
+                                    <span class="status-badge pending-badge">Pending</span>
+                                {% else %}
+                                    <i class="fas fa-check-circle"></i>
+                                    <span class="status-badge completed-badge">Completed</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <!-- Fixed Hash Display -->
+                        <div class="hash-display">
+                            <div>HASH:</div>
+                            {{ session.hash }}
+                        </div>
+                        <div class="session-actions">
+                            {% if session.status == 'pending' %}
+                            <form method="POST" action="{{ url_for('update_status', session_id=session.id) }}" class="action-form">
+                                <button type="submit" class="btn-complete">
+                                    <i class="fas fa-check"></i>
+                                    <span>Complete</span>
+                                </button>
+                            </form>
+                            {% endif %}
+                            <form method="POST" action="{{ url_for('delete_session', session_id=session.id) }}" class="action-form" onsubmit="return confirm('⚠️ WARNING: Deleting blocks breaks blockchain integrity! This action cannot be undone. Are you sure?');">
+                                <button type="submit" class="btn-delete">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <span>Break Chain</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% if sessions|length > 12 %}
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 20px;">
+                        <a href="{{ url_for('blockchain') }}" class="btn-primary" style="max-width: 300px; margin: 0 auto;">
+                            <i class="fas fa-cube"></i>
+                            <span>View All {{ sessions|length }} Blocks</span>
+                        </a>
+                    </div>
+                    {% endif %}
+                {% else %}
+                    <div class="empty-state" style="grid-column: 1 / -1; text-align: center; padding: 40px 20px;">
+                        <i class="fas fa-cubes" style="font-size: 3.5em; margin-bottom: 20px; opacity: 0.3;"></i>
+                        <h3 style="margin-bottom: 10px;">No Blocks Yet</h3>
+                        <p style="color: var(--text-secondary);">
+                            Create your first study session to initialize the blockchain!
+                        </p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Add mining animation on form submit
+document.querySelector('.session-form').addEventListener('submit', function(e) {
+    const button = this.querySelector('button[type="submit"]');
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Mining Block...</span>';
+    button.disabled = true;
+});
+</script>
+{% endblock %}

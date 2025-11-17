@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="auth-container">
+    <div class="auth-header">
+        <i class="fas fa-user-plus"></i>
+        <h1>Create Account</h1>
+        <p>Join us and start tracking your progress</p>
+    </div>
+    <form method="POST" class="auth-form">
+        <div class="input-group">
+            <i class="fas fa-user"></i>
+            <input type="text" name="username" placeholder="Username" required>
+        </div>
+        <div class="input-group">
+            <i class="fas fa-birthday-cake"></i>
+            <input type="number" name="age" placeholder="Age" required>
+        </div>
+        <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" name="password" placeholder="Set Password" required>
+        </div>
+        <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+        </div>
+        <button type="submit" class="btn-primary">
+            <i class="fas fa-user-plus"></i>
+            <span>Sign Up</span>
+        </button>
+    </form>
+    <div class="auth-links">
+        <p>Already have an account? <a href="{{ url_for('login') }}" class="link-text">Sign In</a></p>
+    </div>
+</div>
+{% endblock %}

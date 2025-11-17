@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="auth-container">
+    <h1 class="app-title">STUDY CHAIN</h1>
+    <h2 class="slogan">"Let's begin the journey of better academics"</h2>
+
+    <form method="POST" class="form-box">
+        <input type="text" name="username" placeholder="Enter Username" required>
+        <input type="password" name="new_password" placeholder="Set New Password" required>
+        <input type="password" name="confirm" placeholder="Confirm New Password" required>
+
+        <button type="submit" class="btn">Reset Password</button>
+
+        <p class="switch-link">
+            <a href="{{ url_for('login') }}">Back to Login</a>
+        </p>
+    </form>
+</div>
+
+{% endblock %}

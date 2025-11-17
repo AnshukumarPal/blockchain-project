@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="dashboard-wrapper">
+    <div class="dashboard-header">
+        <div class="welcome-section">
+            <h1><i class="fas fa-cube"></i> Blockchain Explorer</h1>
+            <p class="subtitle">View and verify your study session blockchain</p>
+            {% if is_valid %}
+                <div class="blockchain-status valid">
+                    <i class="fas fa-check-circle"></i>
+                    <span>{{ message }}</span>
+                </div>
+            {% else %}
+                <div class="blockchain-status invalid">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>{{ message }}</span>
+                </div>
+            {% endif %}
+        </div>
+        <a href="{{ url_for('dashboard') }}" class="logout-btn">
+            <i class="fas fa-arrow-left"></i>
+            <span>Back to Dashboard</span>
+        </a>
+    </div>
+
+    <div class="nav-tabs">
+        <a href="{{ url_for('dashboard') }}" class="nav-tab">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+        </a>
+        <a href="{{ url_for('blockchain') }}" class="nav-tab active">
+            <i class="fas fa-cube"></i>
+            <span>Blockchain</span>
+        </a>
+    </div>
+
+    <div class="main-dashboard-box">
+        {% if sessions %}
+            <div class="section-header">
+                <i class="fas fa-link"></i>
+                <h2>Chain of {{ sessions|length }} Block{{ 's' if sessions|length != 1 else '' }}</h2>
+            </div>
+            
+            <div class="blockchain-container">
+                {% for session in sessions %}
+                <div class="block-card" data-block="{{ session.block_number }}">
+                    <div class="block-header">
+                        <div>
+                            <div class="block-number">
+                                <i class="fas fa-cube"></i> Block #{{ session.block_number }}
+                            </div>
+                            <div class="block-timestamp">
+                                <i class="fas fa-clock"></i> {{ session.timestamp.strftime('%B %d, %Y at %H:%M:%S UTC') }}
+                            </div>
+                        </div>
+                        <div>
+                            <span class="nonce-badge">
+                                <i class="fas fa-hashtag"></i> Nonce: {{ session.nonce }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="block-data">
+                        <div class="data-item">
+                            <div class="data-label">
+                                <i class="fas fa-calendar"></i> Date
+                            </div>
+                            <div class="data-value">{{ session.date.strftime('%b %d, %Y') }}</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">
+                                <i class="fas fa-book"></i> Subject
+                            </div>
+                            <div class="data-value">{{ session.subject }}</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">
+                                <i class="fas fa-hourglass"></i> Duration
+                            </div>
+                            <div class="data-value">{{ session.duration }} minutes</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">
+                                <i class="fas fa-info-circle"></i> Status
+                            </div>
+                            <div class="data-value">
+                                {% if session.status == 'pending' %}
+                                    <span class="pending-badge">{{ session.status }}</span>
+                                {% else %}
+                                    <span class="completed-badge">{{ session.status }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">
+                                <i class="fas fa-layer-group"></i> Difficulty
+                            </div>
+                            <div class="data-value">{{ session.difficulty }} leading zeros</div>
+                        </div>
+                    </div>
+
+                    <div class="data-item" style="margin-top: 20px;">
+                        <div class="data-label">
+                            <i class="fas fa-fingerprint"></i> Current Block Hash
+                        </div>
+                        <div class="hash-display">{{ session.hash }}</div>
+                    </div>
+
+                    <div class="data-item" style="margin-top: 15px;">
+                        <div class="data-label">
+                            <i class="fas fa-link"></i> Previous Block Hash
+                        </div>
+                        <div class="hash-display">{{ session.prev_hash }}</div>
+                    </div>
+
+                    {% if not loop.last %}
+                    <div style="text-align: center; margin-top: 20px; color: var(--blockchain-cyan);">
+                        <i class="fas fa-arrow-down" style="font-size: 1.5em;"></i>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="section-box" style="margin-top: 40px; text-align: center;">
+                <h3 style="margin-bottom: 15px;">
+                    <i class="fas fa-shield-alt"></i> Blockchain Information
+                </h3>
+                <p style="color: var(--text-secondary); line-height: 1.8;">
+                    This blockchain uses SHA-256 hashing with Proof of Work (PoW) consensus mechanism.
+                    Each block is cryptographically linked to the previous block, ensuring data integrity
+                    and immutability. The difficulty level requires {{ sessions[0].difficulty if sessions else 3 }} leading zeros in each hash.
+                </p>
+                <button onclick="verifyChain()" class="btn-primary" style="margin-top: 20px; max-width: 300px; margin-left: auto; margin-right: auto;">
+                    <i class="fas fa-check-double"></i>
+                    <span>Verify Blockchain</span>
+                </button>
+            </div>
+        {% else %}
+            <div class="empty-state" style="text-align: center; padding: 60px 20px;">
+                <i class="fas fa-cubes" style="font-size: 4em; color: var(--text-secondary); opacity: 0.3; margin-bottom: 20px;"></i>
+                <h2 style="margin-bottom: 15px;">No Blocks Yet</h2>
+                <p style="color: var(--text-secondary); font-size: 1.1em;">
+                    Create your first study session to start building your blockchain!
+                </p>
+                <a href="{{ url_for('dashboard') }}" class="btn-primary" style="max-width: 300px; margin: 30px auto 0;">
+                    <i class="fas fa-plus"></i>
+                    <span>Add First Block</span>
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function verifyChain() {
+    fetch('/api/verify_chain')
+        .then(response => response.json())
+        .then(data => {
+            if (data.valid) {
+                alert('✅ ' + data.message + '\n\nAll blocks are properly linked and hashes are valid!');
+            } else {
+                alert('❌ ' + data.message + '\n\nBlockchain integrity has been compromised!');
+            }
+        })
+        .catch(error => {
+            alert('Error verifying blockchain: ' + error);
+        });
+}
+
+// Add scroll animation
+document.addEventListener('DOMContentLoaded', function() {
+    const blocks = document.querySelectorAll('.block-card');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, {
+        threshold: 0.1
+    });
+    
+    blocks.forEach(block => {
+        block.style.opacity = '0';
+        block.style.transform = 'translateY(30px)';
+        block.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(block);
+    });
+});
+</script>
+
+{% endblock %}

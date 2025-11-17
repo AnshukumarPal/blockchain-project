@@ -1,0 +1,32 @@
+# Core Flask Dependencies
+Flask==3.0.0
+Flask-SQLAlchemy==3.1.1
+Werkzeug==3.0.1
+
+# Database
+SQLAlchemy==2.0.44
+
+# Security & Cryptography
+# Use Python's built-in `hashlib` for hashing (no external package required).
+# The `hashlib-md5` package is not available on PyPI and should not be listed here.
+
+# Additional Utilities (Optional but Recommended)
+python-dotenv==1.0.0  # For environment variables
+Flask-Login==0.6.3    # Enhanced session management
+Flask-WTF==1.2.1      # CSRF protection and forms
+WTForms==3.1.1        # Form validation
+
+# Development Tools (Optional)
+pytest==7.4.3         # Testing
+black==23.12.1        # Code formatting
+flake8==6.1.0         # Linting
+
+# Production Server (Optional)
+gunicorn==21.2.0      # WSGI server for production
+# PostgreSQL adapter (Windows/modern Python note)
+# If you plan to use PostgreSQL, prefer a version that has pre-built wheels for your Python
+# version (e.g. psycopg2-binary==2.9.11 supports more Python versions). On Windows,
+# building psycopg2 from source requires the PostgreSQL development tools (pg_config)
+# and a C compiler. If you're not using PostgreSQL in development, comment out or remove
+# the psycopg2-binary entry.
+psycopg2-binary==2.9.9  # PostgreSQL adapter (if using PostgreSQL)
