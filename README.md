@@ -88,7 +88,7 @@ This project is licensed under the MIT License - see LICENSE file for details
 ## 👨‍💻 Author
 
 **A2R**
-- GitHub: [AnshukumarPal](www.github.com/AnshukumarPal),[Ruchi](www.github.com/Richi-Rich01), [Astha](www.github.com/astharavat)
+- GitHub: [AnshukumarPal](https://www.github.com/AnshukumarPal), [Ruchi](https://www.github.com/Richi-Rich01), [Astha](https://www.github.com/astharavat)
 - Email: [AnshukumarPal](anshuspal.btce2023@iar.ac.in), [Ruchi](ruchirudani01@gmail.com), [Astha](astharavat1525@gmail.com)
 
 ---
