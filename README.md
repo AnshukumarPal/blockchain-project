@@ -409,7 +409,7 @@ This project is licensed under the MIT License - see LICENSE file for details
 - Study productivity enthusiasts
 
 ## Live Preview
-https://anshukumarpal.github.io/blockchain-project
+https://anshukumarpal.github.io/blockchain-project/
 
 ---
 
