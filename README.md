@@ -81,26 +81,6 @@ python app.py
 http://localhost:5000
 ```
 
-## 📁 Project Structure
-
-```
-study-chain/
-├── app.py                  # Main Flask application with blockchain logic
-├── requirements.txt        # Python dependencies
-├── instance/
-│   └── study_chain.db     # SQLite database (auto-created)
-├── static/
-│   ├── style.css          # Modern blockchain-themed CSS
-│   └── script.js          # Frontend JavaScript
-└── templates/
-    ├── base.html          # Base template with layout
-    ├── login.html         # Login page
-    ├── register.html      # Registration page
-    ├── forget_password.html
-    ├── dashboard.html     # Main dashboard with stats
-    └── blockchain.html    # Blockchain explorer
-```
-
 ## 📄 License
 
 This project is licensed under the MIT License - see LICENSE file for details
@@ -108,21 +88,9 @@ This project is licensed under the MIT License - see LICENSE file for details
 ## 👨‍💻 Author
 
 **A2R**
-- GitHub: [AnshukumarPal](www.github.com/AnshukumarPal),[Richi-Rich01](wwww.github.com/Richi-Rich01), []
+- GitHub: [AnshukumarPal](www.github.com/AnshukumarPal),[Ruchi](wwww.github.com/Richi-Rich01), [Astha](www.github.com/astharavat)
 - Email: [AnshukumarPal](anshuspal.btce2023@iar.ac.in), [Ruchi](ruchirudani01@gmail.com), [Astha](astharavat1525@gmail.com)
-
-## 🙏 Acknowledgments
-
-- Blockchain technology inspiration
-- Flask community
-- Open source contributors
-- Study productivity enthusiasts
-
-## Live Preview
-https://anshukumarpal.github.io/blockchain-project/
 
 ---
 
 **Built with 💙 using Flask, SQLAlchemy, and Blockchain Technology**
-
-*Secure your study journey on an immutable blockchain!*
